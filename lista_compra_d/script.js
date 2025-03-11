@@ -1,9 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
     let lista = document.getElementById("lista");
     let elementos = [];
-    
-    while (true) {
-        let entrada = prompt("Introduce un elemento (deja vacío para finalizar):");
+    let entrada;
+    while (entrada = prompt("Introduce un elemento (deja vacío para finalizar):")) {
         if (!entrada) break;
         elementos.push(entrada);
     }

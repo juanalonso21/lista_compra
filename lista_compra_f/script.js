@@ -1,3 +1,35 @@
+class Item {
+  constructor(text, checked) {
+    this.text = text;
+    this.checked = checked;
+  }
+
+  saveToLocalStorage() {
+    let items = JSON.parse(localStorage.getItem('items')) || [];
+    items.push(this);
+    localStorage.setItem('items', JSON.stringify(items));
+  }
+
+  static removeFromLocalStorage(text) {
+    let items = JSON.parse(localStorage.getItem('items')) || [];
+    items = items.filter(item => item.text !== text);
+    localStorage.setItem('items', JSON.stringify(items));
+  }
+
+  static updateInLocalStorage(text, checked) {
+    let items = JSON.parse(localStorage.getItem('items')) || [];
+    let item = items.find(item => item.text === text);
+    if (item) {
+      item.checked = checked;
+      localStorage.setItem('items', JSON.stringify(items));
+    }
+  }
+
+  static loadFromLocalStorage() {
+    return JSON.parse(localStorage.getItem('items')) || [];
+  }
+}
+
 var myNodelist = document.getElementsByTagName("LI");
 var i;
 for (i = 0; i < myNodelist.length; i++) {
@@ -9,20 +41,21 @@ for (i = 0; i < myNodelist.length; i++) {
 }
 
 var close = document.getElementsByClassName("close");
-var i;
 for (i = 0; i < close.length; i++) {
   close[i].onclick = function() {
-    var div = this.parentElement;
-    div.style.display = "none";
+    var li = this.parentElement;
+    li.style.display = "none";
+    Item.removeFromLocalStorage(li.textContent.slice(0, -1));
   }
 }
 
 var list = document.querySelector('ul');
 list.addEventListener('click', function(ev) {
   if (ev.target.tagName === 'LI') {
-    ev.target.classList.toggle('checked'); //esto lo que hace es ponerle la clase checked al elemento li que hace que se vea distinto por el css
+    ev.target.classList.toggle('checked');
+    Item.updateInLocalStorage(ev.target.textContent.slice(0, -1), ev.target.classList.contains('checked'));
   }
-}, false);
+});
 
 function newElement() {
   var li = document.createElement("li");
@@ -33,6 +66,8 @@ function newElement() {
     alert("No has escrito nada");
   } else {
     document.getElementById("myUL").appendChild(li);
+    let item = new Item(inputValue, false);
+    item.saveToLocalStorage();
   }
   document.getElementById("myInput").value = "";
 
@@ -44,8 +79,36 @@ function newElement() {
 
   for (i = 0; i < close.length; i++) {
     close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
+      var li = this.parentElement;
+      li.style.display = "none";
+      Item.removeFromLocalStorage(li.textContent.slice(0, -1));
     }
   }
 }
+
+function loadElementsFromLocalStorage() {
+  var items = Item.loadFromLocalStorage();
+  items.forEach(item => {
+    var li = document.createElement("li");
+    var t = document.createTextNode(item.text);
+    li.appendChild(t);
+    if (item.checked) {
+      li.classList.add('checked');
+    }
+    document.getElementById("myUL").appendChild(li);
+
+    var span = document.createElement("SPAN");
+    var txt = document.createTextNode("x");
+    span.className = "close";
+    span.appendChild(txt);
+    li.appendChild(span);
+
+    span.onclick = function() {
+      var li = this.parentElement;
+      li.style.display = "none";
+      Item.removeFromLocalStorage(li.textContent.slice(0, -1));
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', loadElementsFromLocalStorage);
