@@ -1,22 +1,22 @@
-class Item { //Clase para guardar los elementos de la lista de la compra
+class Item {
   constructor(text, checked) {
     this.text = text;
     this.checked = checked;
   }
 
-  saveToLocalStorage() { //Funcion dentro de item para guardar los elementos en el local storage
+  saveToLocalStorage() {
     let items = JSON.parse(localStorage.getItem('items')) || [];
     items.push(this);
     localStorage.setItem('items', JSON.stringify(items));
   }
 
-  static removeFromLocalStorage(text) { //Funcion para eliminar elementos del local storage
+  static removeFromLocalStorage(text) {
     let items = JSON.parse(localStorage.getItem('items')) || [];
     items = items.filter(item => item.text !== text);
     localStorage.setItem('items', JSON.stringify(items));
   }
 
-  static updateInLocalStorage(text, checked) { //Funcion para actualizar elementos del local storage
+  static updateInLocalStorage(text, checked) {
     let items = JSON.parse(localStorage.getItem('items')) || [];
     let item = items.find(item => item.text === text);
     if (item) {
@@ -25,11 +25,11 @@ class Item { //Clase para guardar los elementos de la lista de la compra
     }
   }
 
-  static loadFromLocalStorage() { //Funcion para cargar elementos del local storage
+  static loadFromLocalStorage() {
     return JSON.parse(localStorage.getItem('items')) || [];
   }
-  
 }
+
 async function loadProductsFromJSON() {
   try {
     let response = await fetch('products.json');
@@ -40,7 +40,6 @@ async function loadProductsFromJSON() {
     console.error('Error cargando el archivo JSON:', error);
   }
 }
-
 
 function initializeList() {
   let myNodelist = document.getElementsByTagName("LI");
@@ -71,9 +70,7 @@ function initializeList() {
   });
 }
 
-// Llamar a la función para inicializar la lista
 initializeList();
-
 
 function newElement() {
   var li = document.createElement("li");
