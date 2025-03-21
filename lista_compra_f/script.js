@@ -129,4 +129,4 @@ function loadElementsFromLocalStorage() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', loadElementsFromLocalStorage);
+document.addEventListener('DOMContentLoaded', loadProductsFromJSON);

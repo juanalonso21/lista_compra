@@ -1,0 +1,22 @@
+[
+    {
+        "text": "Leche",
+        "checked": true
+    },
+    {
+        "text": "Pan",
+        "checked": false
+    },
+    {
+        "text": "Huevos",
+        "checked": false
+    },
+    {
+        "text": "Mantequilla",
+        "checked": true
+    },
+    {
+        "text": "Azúcar",
+        "checked": false
+    }
+]
